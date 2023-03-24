@@ -148,11 +148,6 @@ function renderSavedGames() {
 }
 
 function addNumberToGame(numberToAdd) {
-  if (numberToAdd < 1 || numberToAdd > 60) {
-    console.error('Número inválido: ', numberToAdd);
-    return;
-  }
-
   if (state.currentGame.length >= 6) {
     console.error('O jogo já está completo.');
     return;
@@ -169,11 +164,6 @@ function addNumberToGame(numberToAdd) {
 function removeNumberFromGame(numberToRemove) {
   var newGame = [];
 
-  if (numberToRemove < 1 || numberToRemove > 60) {
-    console.error('Número inválido: ', numberToRemove);
-    return;
-  }
-
   for (var i = 0; i < state.currentGame.length; i++) {
     var currentNumber = state.currentGame[i];
 
@@ -188,22 +178,10 @@ function removeNumberFromGame(numberToRemove) {
 }
 
 function isNumberInGame(numberToCheck) {
-  /*
-  if (state.currentGame.includes(numberToCheck)) {
-    return true;
-  } else {
-    return false;
-  }*/
-
   return state.currentGame.includes(numberToCheck);
 }
 
 function saveGame() {
-  if (!isGameComplete()) {
-    console.error('O jogo não está completo.');
-    return;
-  }
-
   state.savedGames.push(state.currentGame);
   writeToLocalStorage();
   newGame();
