@@ -44,12 +44,10 @@ function render() {
 function renderBoard() {
   var divBoard = document.querySelector('#megasena-board');
 
-  //zerar HTML interno da div
   divBoard.innerHTML = '';
 
   var ulNumbers = document.createElement('ul');
 
-  //inserindo classe para trabalhar com o CSS
   ulNumbers.classList.add('numbers');
 
   for (var i = 0; i < state.board.length; i++) {
@@ -86,7 +84,6 @@ function handleNumberClick(event) {
 function renderButtons() {
   var divButtons = document.querySelector('#megasena-buttons');
 
-  //zerar HTML interno da div
   divButtons.innerHTML = '';
 
   var buttonNewGame = createNewGameButton();
@@ -121,19 +118,24 @@ function createSaveGameButton() {
   button.textContent = 'Salvar jogo';
   button.disabled = !isGameComplete();
 
+  if (!isGameComplete()) {
+    button.dataset.saveBtn = 'saveBtnDisabled';
+  }
+
   button.addEventListener('click', saveGame);
 
   return button;
 }
 
 function renderSavedGames() {
-  var divSavedGames = document.querySelector('#megasena-saved-games');
+  var divSavedGames = document.querySelector('.saved-games-conteiner');
   divSavedGames.innerHTML = '';
 
   if (state.savedGames.length === 0) {
-    divSavedGames.innerHTML = '<p>Nenhum jogo salvo</p>';
+    divSavedGames.innerHTML = '<p class="empty-game">Nenhum jogo salvo</p>';
   } else {
     var ulSavedGames = document.createElement('ul');
+    ulSavedGames.className = 'saved-games-list';
 
     for (var i = 0; i < state.savedGames.length; i++) {
       var currentGame = state.savedGames[i];
@@ -148,11 +150,6 @@ function renderSavedGames() {
 }
 
 function addNumberToGame(numberToAdd) {
-  if (numberToAdd < 1 || numberToAdd > 60) {
-    console.error('Número inválido: ', numberToAdd);
-    return;
-  }
-
   if (state.currentGame.length >= 6) {
     console.error('O jogo já está completo.');
     return;
@@ -169,11 +166,6 @@ function addNumberToGame(numberToAdd) {
 function removeNumberFromGame(numberToRemove) {
   var newGame = [];
 
-  if (numberToRemove < 1 || numberToRemove > 60) {
-    console.error('Número inválido: ', numberToRemove);
-    return;
-  }
-
   for (var i = 0; i < state.currentGame.length; i++) {
     var currentNumber = state.currentGame[i];
 
@@ -188,22 +180,10 @@ function removeNumberFromGame(numberToRemove) {
 }
 
 function isNumberInGame(numberToCheck) {
-  /*
-  if (state.currentGame.includes(numberToCheck)) {
-    return true;
-  } else {
-    return false;
-  }*/
-
   return state.currentGame.includes(numberToCheck);
 }
 
 function saveGame() {
-  if (!isGameComplete()) {
-    console.error('O jogo não está completo.');
-    return;
-  }
-
   state.savedGames.push(state.currentGame);
   writeToLocalStorage();
   newGame();
